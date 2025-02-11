@@ -1,2 +1,2 @@
 # Demo
-Demo code  for teaching C#
+Demo code for teaching C#

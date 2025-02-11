@@ -1,0 +1,34 @@
+﻿@page "/users"
+@rendermode InteractiveServer
+@attribute [OutputCache(Duration = 5)]
+
+@inject UsersApiClient UsersApi
+
+<PageTitle>User</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data loaded from a backend API service.</p>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <FluentDataGrid Id="weathergrid" Items="@users" GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem="User">
+        <PropertyColumn Title="E-Mail" Property="@(c => c!.Email)" Sortable="true" Align="Align.Start"/>
+        <PropertyColumn Title="Firstname" Property="@(c => c!.FirstName)" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Title="Lastname" Property="@(c => c!.LastName)" Sortable="true" Align="Align.Center"/>
+        <PropertyColumn Title="Age" Property="@(c => c!.Age)" Sortable="true" Align="Align.End" />
+    </FluentDataGrid>
+}
+
+@code {
+    private IQueryable<User>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UsersApi.GetUsersAsync();
+    }
+}
