@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Demo.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,13 +33,3 @@ app.MapGet("/api/users", () =>
 
 app.MapDefaultEndpoints();
 app.Run();
-
-
-class User()
-{
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public string FirstName { get; set; }//, string LastName, string Email, int Age
-    public string LastName { get; set; }//, string LastName, string Email, int Age
-    public string Email { get; set; }//, string LastName, string Email, int Age
-    public int Age { get; set; }//, string LastName, string Email, int Age
-}
