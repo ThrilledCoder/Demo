@@ -1,14 +1,19 @@
 ﻿@page "/users"
+@using Demo.Application.Users
+@using Demo.Core.Models
+@using MediatR
+
 @rendermode InteractiveServer
 @attribute [OutputCache(Duration = 5)]
 
 @inject UsersApiClient UsersApi
+@inject ISender sender
 
 <PageTitle>User</PageTitle>
 
-<h1>Weather</h1>
+<h1>Users</h1>
+<FluentButton OnClick="@AddUser"></FluentButton>
 
-<p>This component demonstrates showing data loaded from a backend API service.</p>
 
 @if (users == null)
 {
@@ -16,10 +21,10 @@
 }
 else
 {
-    <FluentDataGrid Id="weathergrid" Items="@users" GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem="User">
-        <PropertyColumn Title="E-Mail" Property="@(c => c!.Email)" Sortable="true" Align="Align.Start"/>
+    <FluentDataGrid Id="usergrid" Items="@users" GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem="User">
+        <PropertyColumn Title="E-Mail" Property="@(c => c!.Email)" Sortable="true" Align="Align.Start" />
         <PropertyColumn Title="Firstname" Property="@(c => c!.FirstName)" Sortable="true" Align="Align.Center" />
-        <PropertyColumn Title="Lastname" Property="@(c => c!.LastName)" Sortable="true" Align="Align.Center"/>
+        <PropertyColumn Title="Lastname" Property="@(c => c!.LastName)" Sortable="true" Align="Align.Center" />
         <PropertyColumn Title="Age" Property="@(c => c!.Age)" Sortable="true" Align="Align.End" />
     </FluentDataGrid>
 }
@@ -30,5 +35,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         users = await UsersApi.GetUsersAsync();
+    }
+
+    private async Task AddUser()
+    {
+        var userRequest = new CreateUserRequest("John", "Doe");
+        var response = await sender.Send(userRequest);
+        users = users?.Append(response);
     }
 }

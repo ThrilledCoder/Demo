@@ -1,8 +1,10 @@
+using Demo.Core.Models;
+
 namespace Demo.Web;
 
 public class UsersApiClient(HttpClient httpClient)
 {
-    public async Task<IQueryable<User>?> GetUsersAsync(int maxItems = 10, CancellationToken cancellationToken = default)
+    public async Task<IQueryable<User>?> GetUsersAsync(int maxItems = 100, CancellationToken cancellationToken = default)
     {
         List<User>? users = null;
 
@@ -21,8 +23,4 @@ public class UsersApiClient(HttpClient httpClient)
 
         return users?.AsQueryable();
     }
-}
-
-public record User(string FirstName, string LastName, string Email, int Age)
-{
 }
