@@ -4,6 +4,8 @@ using Demo.Application;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Demo.Infrastructure;
 using Demo.Presentation;
+using Demo.Application.Users;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -20,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
         .AddPresentation(builder.Configuration);
 
     builder.Services.AddOutputCache();
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateUserRequest).Assembly));
 
     builder.Services.AddHttpClient<UsersApiClient>(client =>
         {
@@ -34,6 +37,10 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Files")), RequestPath = "/Files"
+});
 
 app.UseHttpsRedirection();
 

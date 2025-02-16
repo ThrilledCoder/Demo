@@ -1,0 +1,24 @@
+﻿@page "/files"
+
+<h3>FilesUpAndDown</h3>
+
+<ul>
+    @foreach (var item in fileUrls)
+    {
+        <li><a href="@($"files/{item}")">@item</a></li>
+    }
+</ul>
+
+@code {
+    List<string> fileUrls = [];
+
+    protected override Task OnInitializedAsync()
+    {
+        var files = Directory.GetFiles(Environment.CurrentDirectory + "\\files", "*.jpg");
+        foreach(var file in files){
+            var fileName = Path.GetFileName(file);
+            fileUrls.AddRange(fileName);
+        }
+        return base.OnInitializedAsync();
+    }
+}
