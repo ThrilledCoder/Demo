@@ -1,24 +1,14 @@
 ﻿@page "/files"
+@rendermode InteractiveServer
 
 <h3>FilesUpAndDown</h3>
 
-<ul>
+<FluentButton OnClick="Calculate">Calculate</FluentButton>
+
+<div class="files">
     @foreach (var item in fileUrls)
     {
-        <li><a href="@($"files/{item}")">@item</a></li>
+        <a href="@($"files/{item}")"><div class="file-item">@item </div></a>
     }
-</ul>
+</div>
 
-@code {
-    List<string> fileUrls = [];
-
-    protected override Task OnInitializedAsync()
-    {
-        var files = Directory.GetFiles(Environment.CurrentDirectory + "\\files", "*.jpg");
-        foreach(var file in files){
-            var fileName = Path.GetFileName(file);
-            fileUrls.AddRange(fileName);
-        }
-        return base.OnInitializedAsync();
-    }
-}

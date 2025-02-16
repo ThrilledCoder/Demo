@@ -8,27 +8,27 @@ using Demo.Application.Users;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-{
-    builder.AddServiceDefaults();
 
-    builder.Services.AddRazorComponents()
-        .AddInteractiveServerComponents();
+builder.AddServiceDefaults();
 
-    builder.Services.AddFluentUIComponents();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
-    builder.Services
-        .AddApplication(builder.Configuration)
-        .AddInfrastructure(builder.Configuration)
-        .AddPresentation(builder.Configuration);
+builder.Services.AddFluentUIComponents();
 
-    builder.Services.AddOutputCache();
-    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateUserRequest).Assembly));
+builder.Services
+    .AddApplication(builder.Configuration)
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation(builder.Configuration);
 
-    builder.Services.AddHttpClient<UsersApiClient>(client =>
-        {
-            client.BaseAddress = new("https+http://apiservice");
-        });
-}
+builder.Services.AddOutputCache();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateUserRequest).Assembly));
+
+builder.Services.AddHttpClient<UsersApiClient>(client =>
+    {
+        client.BaseAddress = new("https+http://apiservice");
+    });
+
 
 var app = builder.Build();
 
@@ -39,7 +39,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Files")), RequestPath = "/Files"
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),
+    RequestPath = "/Files"
 });
 
 app.UseHttpsRedirection();
