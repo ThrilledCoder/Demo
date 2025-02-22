@@ -6,6 +6,9 @@ using Demo.Infrastructure;
 using Demo.Presentation;
 using Demo.Application.Users;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using OpenTelemetry.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddFluentUIComponents();
+
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("EntraID"));
+builder.Services.AddAuthorization(options => options.FallbackPolicy = options.DefaultPolicy);
 
 builder.Services
     .AddApplication(builder.Configuration)
@@ -28,7 +35,6 @@ builder.Services.AddHttpClient<UsersApiClient>(client =>
     {
         client.BaseAddress = new("https+http://apiservice");
     });
-
 
 var app = builder.Build();
 
@@ -46,6 +52,8 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseOutputCache();
 
