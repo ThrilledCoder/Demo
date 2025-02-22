@@ -21,7 +21,7 @@ builder.Services.AddFluentUIComponents();
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("EntraID"));
-builder.Services.AddAuthorization(options => options.FallbackPolicy = options.DefaultPolicy);
+//builder.Services.AddAuthorization(options => options.FallbackPolicy = options.DefaultPolicy);
 
 builder.Services
     .AddApplication(builder.Configuration)
